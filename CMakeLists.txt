@@ -44,9 +44,18 @@ set (EASYLOGGING_CONFIG_FILE_PATH
     "${CMAKE_SOURCE_DIR}/easylogging++.config"
     )
 
+set(EXT_PROJECTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules)
+
 #-------------------------------------------------------------------------------
 # TESTS
 #-------------------------------------------------------------------------------
+add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
+
+set(GOOGLETEST_ROOT ${EXT_PROJECTS_DIR}/googletest
+    CACHE STRING "Google Test source root")
+
+message(STATUS "GOOGLETEST_ROOT set to ${GOOGLETEST_ROOT}")
+
 add_subdirectory(test)
 
 #-------------------------------------------------------------------------------
