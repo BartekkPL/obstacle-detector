@@ -7,7 +7,7 @@ project(SelfLocalizator VERSION 0.1.0)
 enable_language(C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "-Wall -std=c++17")
+set(CMAKE_CXX_FLAGS "-Wall -std=c++17 -pthread")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
 
 message(STATUS "Start of execution CMake for Self Localizator library in"
@@ -24,7 +24,14 @@ set(EASYLOGGING_CONFIG_FILE_PATH
 set(PROJECT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-file(GLOB PROJECT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB PROJECT_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/client_tcp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/data_presenter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/easylogging++.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/self_localizator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/server_tcp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/socket.cpp
+    )
 
 add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
@@ -36,7 +43,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 #-------------------------------------------------------------------------------
 # EXTERNAL MODULES
 #-------------------------------------------------------------------------------
-find_package(OpenCV 4.0.0 REQUIRED)
+find_package(OpenCV 4.0.0 REQUIRED core imgproc videoio highgui features2d
+    xfeatures2d)
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 
@@ -44,17 +52,9 @@ set (EASYLOGGING_CONFIG_FILE_PATH
     "${CMAKE_SOURCE_DIR}/easylogging++.config"
     )
 
-set(EXT_PROJECTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules)
-
 #-------------------------------------------------------------------------------
 # TESTS
 #-------------------------------------------------------------------------------
-add_subdirectory(${EXT_PROJECTS_DIR}/googletest)
-
-set(GOOGLETEST_ROOT ${EXT_PROJECTS_DIR}/googletest
-    CACHE STRING "Google Test source root")
-
-message(STATUS "GOOGLETEST_ROOT set to ${GOOGLETEST_ROOT}")
 
 add_subdirectory(test)
 
@@ -73,6 +73,19 @@ include_directories("${PROJECT_BINARY_DIR}")
 #-------------------------------------------------------------------------------
 add_executable(main ${PROJECT_SOURCE_DIR}/main.cpp)
 target_link_libraries(main
+    ${OpenCV_LIBS}
+    ${PROJECT_NAME}
+    )
+
+
+add_executable(server ${PROJECT_SOURCE_DIR}/server.cpp)
+target_link_libraries(server
+    ${OpenCV_LIBS}
+    ${PROJECT_NAME}
+    )
+
+add_executable(client ${PROJECT_SOURCE_DIR}/client.cpp)
+target_link_libraries(client
     ${OpenCV_LIBS}
     ${PROJECT_NAME}
     )
