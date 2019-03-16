@@ -5,7 +5,16 @@ dist: bionic
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
-
+  - sudo apt-get install -y libgtest-dev valgrind cmake
+  - sudo wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz
+  - sudo tar xf release-1.7.0.tar.gz
+  - cd googletest-release-1.7.0
+  - sudo cmake -DBUILD_SHARED_LIBS=ON .
+  - sudo make
+  - sudo cp -a include/gtest /usr/include
+  - sudo cp -a libgtest_main.so libgtest.so /usr/lib/
+  - which valgrind
+  - cd "${TRAVIS_BUILD_DIR}"
 
 install:
   - sudo apt-get install -qq g++-7
@@ -26,7 +35,7 @@ install:
   - cd build
 
   # Set build instructions for Ubuntu distro.
-  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D BUILD_EXAMPLES=OFF -D BUILD_opencv_apps=OFF -D BUILD_DOCS=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_TESTS=OFF -D CMAKE_INSTALL_PREFIX=/usr/local ..
+  - cmake -D CMAKE_BUILD_TYPE=RELEASE -D BUILD_EXAMPLES=OFF -D BUILD_opencv_apps=OFF -D BUILD_DOCS=OFF -D BUILD_PERF_TESTS=OFF -D BUILD_TESTS=OFF -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -D OPENCV_ENABLE_NONFREE=true ..
 
   # Run 'make' with four threads.
   - make -j8
@@ -46,7 +55,7 @@ script:
   - cd build
   - cmake ..
   - make
-  - ./test/bvh-parser-test
+  - ./test/SelfLocalizator_test
 
 
 notifications:
