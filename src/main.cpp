@@ -7,10 +7,9 @@
 #include "config.hpp"
 #include "easylogging++.hpp"
 
-#include "client_tcp.hpp"
 #include "data_presenter.hpp"
 #include "self_localizator.hpp"
-#include "server_tcp.hpp"
+#include "utils.hpp"
 
 INITIALIZE_EASYLOGGINGPP
 
@@ -23,47 +22,53 @@ int main(int argc, char** argv) {
   el::Loggers::reconfigureLogger("default", conf);
   el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
 
-  sl::connection::ClientTCP client_tcp("127.0.0.1", 50000);
-  sl::connection::ServerTCP server_tcp(50000);
+  cv::Mat img1, img2;
+  cv::VideoCapture cam;
+  cam.open(0);
 
-  if (!server_tcp.Start()) {
-    return -1;
+  cv::Mat img;
+  cam >> img;
+  img1 = img.clone();
+
+  while(cam.isOpened()) {
+    cam >> img2;
+
+    std::vector<cv::KeyPoint> keypoints1, keypoints2;
+    std::vector<cv::DMatch> good_matches;
+    sl::SelfLocalizator::FeatureMatch(
+        /**cv::Mat(img1, sl::utils::GetWarningFrame(img1.size())),
+        cv::Mat(img2, sl::utils::GetWarningFrame(img2.size())),*/
+        img1, img2, keypoints1, keypoints2, good_matches);
+    cv::Mat img_matches;
+
+    std::vector<sl::utils::Line> lines =
+        sl::SelfLocalizator::FilterTransformVectors(
+        sl::SelfLocalizator::GetTransformVectors(keypoints1, keypoints2,
+        good_matches, /*sl::utils::GetWarningOffset(img2.size())*/{0, 0}));
+
+    img = sl::DataPresenter::DrawTransformVectors(img2, lines);
+
+    img = sl::DataPresenter::DrawWarningFrame(img,
+        sl::utils::GetWarningFrame(img.size()));
+
+    img = sl::DataPresenter::DrawDangerFrame(img,
+        sl::utils::GetDangerFrame(img.size()));
+
+    std::vector<cv::Rect> partitions =
+        sl::SelfLocalizator::FindPotentialObstaclePartitions(lines);
+
+    for (auto &partition : partitions) {
+      cv::rectangle(img, partition, {0, 255, 0});
+    }
+
+    cv::imshow("Display Image", img);
+    char ch = cv::waitKey(10);
+    if (ch == 27) {
+      std::cout << "\rESC Key pressed, Exiting." << std::endl;
+      break;
+    }
+    img1 = img2.clone();
   }
-
-  std::thread t_server(&sl::connection::ServerTCP::Run, &server_tcp);
-
-  if (!client_tcp.Connect()) {
-    return -1;
-  }
-
-  std::this_thread::sleep_for(10s);
-  server_tcp.Stop();
-
-  // //-- Draw keypoints
-  // sl::SelfLocalizator localizator;
-
-  // cv::Mat img1, img2;
-  // cv::VideoCapture cam;
-  // cam.open(0);
-
-  // while(cam.isOpened()) {
-  //   cam >> img1;
-  //   cam >> img2;
-
-  //   std::vector<cv::KeyPoint> keypoints1, keypoints2;
-  //   std::vector<cv::DMatch> good_matches;
-  //   localizator.FeatureMatch(img1, img2, keypoints1, keypoints2, good_matches);
-  //   cv::Mat img_matches;
-
-  //   cv::imshow("Display Image", sl::DataPresenter::DrawMatchesTransformVector(
-  //       img2, keypoints1, keypoints2, good_matches));
-  //   char ch = cv::waitKey(10);
-  //   // ESC Check
-  //   if (ch == 27) {
-  //     std::cout << "\rESC Key pressed, Exiting." << std::endl;
-  //     break;
-  //   }
-  // }
 
   return 0;
 }

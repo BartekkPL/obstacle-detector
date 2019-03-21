@@ -25,12 +25,10 @@ set(PROJECT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 file(GLOB PROJECT_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/client_tcp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data_presenter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/easylogging++.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/self_localizator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/server_tcp.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/socket.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCES})
@@ -73,19 +71,6 @@ include_directories("${PROJECT_BINARY_DIR}")
 #-------------------------------------------------------------------------------
 add_executable(main ${PROJECT_SOURCE_DIR}/main.cpp)
 target_link_libraries(main
-    ${OpenCV_LIBS}
-    ${PROJECT_NAME}
-    )
-
-
-add_executable(server ${PROJECT_SOURCE_DIR}/server.cpp)
-target_link_libraries(server
-    ${OpenCV_LIBS}
-    ${PROJECT_NAME}
-    )
-
-add_executable(client ${PROJECT_SOURCE_DIR}/client.cpp)
-target_link_libraries(client
     ${OpenCV_LIBS}
     ${PROJECT_NAME}
     )
