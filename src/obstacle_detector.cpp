@@ -1,4 +1,4 @@
-#include "self_localizator.hpp"
+#include "obstacle_detector.hpp"
 
 #ifndef HAVE_OPENCV_XFEATURES2D
 #error "This code needs the xfeatures2d contrib module to be run."
@@ -19,16 +19,16 @@ const int THRESHOLD_RADIUS = 50;
 
 } // namespace
 
-namespace sl {
+namespace od {
 
-void SelfLocalizator::FeaturePointsDetect(const cv::Mat& img,
+void ObstacleDetector::FeaturePointsDetect(const cv::Mat& img,
     std::vector<cv::KeyPoint> &keypoints) {
   cv::Ptr<cv::xfeatures2d::SURF> detector =
       cv::xfeatures2d::SURF::create(MIN_HESSIAN);
   detector->detect(img, keypoints);
 }
 
-void SelfLocalizator::FeatureMatch(const cv::Mat &img, const cv::Mat &img_next,
+void ObstacleDetector::FeatureMatch(const cv::Mat &img, const cv::Mat &img_next,
                   std::vector<cv::KeyPoint> &keypoints,
                   std::vector<cv::KeyPoint> &keypoints_next,
                   std::vector<cv::DMatch> &good_matches) {
@@ -53,7 +53,7 @@ void SelfLocalizator::FeatureMatch(const cv::Mat &img, const cv::Mat &img_next,
   }
 }
 
-std::vector<utils::Line> SelfLocalizator::GetTransformVectors(
+std::vector<utils::Line> ObstacleDetector::GetTransformVectors(
     const std::vector<cv::KeyPoint> &keypoints1,
     const std::vector<cv::KeyPoint> &keypoints2,
     const std::vector<cv::DMatch> &matches,
@@ -67,7 +67,7 @@ std::vector<utils::Line> SelfLocalizator::GetTransformVectors(
   return result;
 }
 
-std::vector<utils::Line> SelfLocalizator::FilterTransformVectors(
+std::vector<utils::Line> ObstacleDetector::FilterTransformVectors(
     const std::vector<utils::Line> &vectors) {
   float distance_sum = 0.0;
   std::vector<utils::Line> result;
@@ -93,7 +93,7 @@ std::vector<utils::Line> SelfLocalizator::FilterTransformVectors(
   return result;
 }
 
-std::vector<cv::Rect> SelfLocalizator::FindPotentialObstaclePartitions(
+std::vector<cv::Rect> ObstacleDetector::FindPotentialObstaclePartitions(
     const std::vector<utils::Line> lines) {
   std::vector<int> labels;
   int threshold_power = THRESHOLD_RADIUS * THRESHOLD_RADIUS;
@@ -123,4 +123,4 @@ std::vector<cv::Rect> SelfLocalizator::FindPotentialObstaclePartitions(
   return boxes;
 }
 
-} // namespace sl
+} // namespace od

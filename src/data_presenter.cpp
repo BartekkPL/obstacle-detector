@@ -2,9 +2,7 @@
 
 #include <opencv2/imgproc.hpp>
 
-#include "self_localizator.hpp"
-
-namespace sl {
+namespace od {
 
 cv::Mat DataPresenter::DrawDangerFrame(const cv::Mat &img,
                                        const cv::Rect &frame) {
@@ -27,7 +25,7 @@ cv::Mat DataPresenter::DrawMatches(const cv::Mat &img1,
 }
 
 cv::Mat DataPresenter::DrawTransformVectors(const cv::Mat &img,
-    const std::vector<sl::utils::Line> vectors) {
+    const std::vector<od::utils::Line> vectors) {
   cv::Mat result = img.clone();
   for (auto &line : vectors) {
     cv::line(result, line.first, line.second, cv::Scalar(255, 0, 0));
@@ -43,4 +41,4 @@ cv::Mat DataPresenter::DrawWarningFrame(const cv::Mat &img,
   return result;
 }
 
-} // namespace sl
+} // namespace od

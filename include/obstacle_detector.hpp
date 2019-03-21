@@ -1,5 +1,5 @@
-#ifndef LOCALIZATOR_SELF_LOCALIZATOR_HPP_
-#define LOCALIZATOR_SELF_LOCALIZATOR_HPP_
+#ifndef OBSTACLE_DETECTOR_OBSTACLE_DETECTOR_HPP_
+#define OBSTACLE_DETECTOR_OBSTACLE_DETECTOR_HPP_
 
 #include <vector>
 
@@ -7,9 +7,9 @@
 
 #include "utils.hpp"
 
-namespace sl {
+namespace od {
 
-class SelfLocalizator {
+class ObstacleDetector {
  public:
   /**
    * @brief   Detects feature points on image
@@ -63,6 +63,6 @@ class SelfLocalizator {
       const std::vector<utils::Line> lines);
 };
 
-} // namespace sl
+} // namespace od
 
-#endif  // LOCALIZATOR_SELF_LOCALIZATOR_HPP_
+#endif  // OBSTACLE_DETECTOR_OBSTACLE_DETECTOR_HPP_

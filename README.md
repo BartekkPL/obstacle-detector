@@ -1,5 +1,5 @@
-# Welcome to **Self Localizator**, your new C++ library for detecting obstacles and self localization in space!
-[![Build Status](https://travis-ci.org/BartekkPL/self-localizator.svg?branch=master)](https://travis-ci.org/BartekkPL/self-localizator)
+# Welcome to **Obstacle Detector**, your new C++ library for detecting obstacles in space with only one camera!
+[![Build Status](https://travis-ci.org/BartekkPL/obstacle-detector.svg?branch=master)](https://travis-ci.org/BartekkPL/obstacle-detector)
 =======================
 
   - [Features](#features)
@@ -16,8 +16,10 @@
 
 ## Platforms ##
 
-This parser has been used only on Linux, but
-it probably can works on any other platform as well, because it doesn't use Linux system library.
+This obstacle detector has been used only on Linux, but
+it probably can works on any other platform as well.
+
+Tested on Raspberry Pi 3B+.
 
 ## Usage ##
 
@@ -26,8 +28,8 @@ If you want to know something more please look at tests or write mail to me:)
 
 ### Build ###
 ```
-git clone https://github.com/BartekkPL/self-localizator.git
-cd self-localizator/
+git clone https://github.com/BartekkPL/obstacle-detector.git
+cd obstacle-detector/
 mkdir build
 cd build/
 cmake ..
@@ -36,7 +38,7 @@ make
 
 And after these steps you have builded library ready to use it in new projects!
 
-You found it at **self-localizator/build/libSelfLocalizator.so**.
+You found it at **obstacle-detector/build/libObstacleDetector.so**.
 
 ## Projects using this library ##
 
@@ -44,4 +46,4 @@ I use it in my master thesis.
 
 ## License ##
 
-SELF-LOCALIZATOR is released under [Apache License](https://opensource.org/licenses/Apache-2.0).
+OBSTACLE-DETECTOR is released under [Apache License](https://opensource.org/licenses/Apache-2.0).

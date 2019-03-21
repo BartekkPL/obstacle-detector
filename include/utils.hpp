@@ -1,9 +1,9 @@
-#ifndef LOCALIZATOR_SELF_UTILS_HPP_
-#define LOCALIZATOR_SELF_UTILS_HPP_
+#ifndef OBSTACLE_DETECTOR_UTILS_HPP_
+#define OBSTACLE_DETECTOR_UTILS_HPP_
 
 #include <opencv2/opencv.hpp>
 
-namespace sl {
+namespace od {
 namespace utils {
 
 using Line = std::pair<cv::Point, cv::Point>;
@@ -39,6 +39,6 @@ cv::Point GetDangerOffset(const cv::Size &img_size);
 cv::Point GetWarningOffset(const cv::Size &img_size);
 
 } // namespace utils
-} // namespace sl
+} // namespace od
 
-#endif  // LOCALIZATOR_SELF_UTILS_HPP_
+#endif  // OBSTACLE_DETECTOR_UTILS_HPP_

@@ -1,5 +1,5 @@
-#ifndef LOCALIZATOR_DATA_PRESENTER_HPP_
-#define LOCALIZATOR_DATA_PRESENTER_HPP_
+#ifndef OBSTACLE_DETECTOR_DATA_PRESENTER_HPP_
+#define OBSTACLE_DETECTOR_DATA_PRESENTER_HPP_
 
 #include <vector>
 
@@ -9,7 +9,7 @@
 
 #include "utils.hpp"
 
-namespace sl {
+namespace od {
 
 class DataPresenter {
  public:
@@ -43,7 +43,7 @@ class DataPresenter {
    * @return  Image with feature points translation vectors
    */
   static cv::Mat DrawTransformVectors(const cv::Mat &img,
-      const std::vector<sl::utils::Line> vectors);
+      const std::vector<od::utils::Line> vectors);
 
   /**
    * @brief   Draws frame that is respected as warning area on image
@@ -55,6 +55,6 @@ class DataPresenter {
 
 };
 
-} // namespace sl
+} // namespace od
 
-#endif // LOCALIZATOR_DATA_PRESENTER_HPP_
+#endif // OBSTACLE_DETECTOR_DATA_PRESENTER_HPP_

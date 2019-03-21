@@ -1,6 +1,6 @@
 #include "utils.hpp"
 
-namespace sl {
+namespace od {
 namespace utils {
 
 cv::Rect GetDangerFrame(const cv::Size &img_size) {
@@ -26,4 +26,4 @@ cv::Point GetWarningOffset(const cv::Size &img_size) {
 }
 
 } // namespace utils
-} // namespace sl
+} // namespace od

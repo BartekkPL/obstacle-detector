@@ -2,7 +2,7 @@
 # PROJECT SETTINGS
 #-------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.5)
-project(SelfLocalizator VERSION 0.1.0)
+project(ObstacleDetector VERSION 1.0.0)
 
 enable_language(C CXX)
 
@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-Wall -std=c++17 -pthread")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g")
 
-message(STATUS "Start of execution CMake for Self Localizator library in"
+message(STATUS "Start of execution CMake for ${PROJECT_NAME} library in"
                 " version ${PROJECT_VERSION}"
                 )
 
@@ -27,7 +27,7 @@ set(PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 file(GLOB PROJECT_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/data_presenter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/easylogging++.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/self_localizator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/obstacle_detector.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils.cpp
     )
 

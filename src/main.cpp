@@ -8,7 +8,7 @@
 #include "easylogging++.hpp"
 
 #include "data_presenter.hpp"
-#include "self_localizator.hpp"
+#include "obstacle_detector.hpp"
 #include "utils.hpp"
 
 INITIALIZE_EASYLOGGINGPP
@@ -35,27 +35,27 @@ int main(int argc, char** argv) {
 
     std::vector<cv::KeyPoint> keypoints1, keypoints2;
     std::vector<cv::DMatch> good_matches;
-    sl::SelfLocalizator::FeatureMatch(
-        /**cv::Mat(img1, sl::utils::GetWarningFrame(img1.size())),
-        cv::Mat(img2, sl::utils::GetWarningFrame(img2.size())),*/
+    od::ObstacleDetector::FeatureMatch(
+        /**cv::Mat(img1, od::utils::GetWarningFrame(img1.size())),
+        cv::Mat(img2, od::utils::GetWarningFrame(img2.size())),*/
         img1, img2, keypoints1, keypoints2, good_matches);
     cv::Mat img_matches;
 
-    std::vector<sl::utils::Line> lines =
-        sl::SelfLocalizator::FilterTransformVectors(
-        sl::SelfLocalizator::GetTransformVectors(keypoints1, keypoints2,
-        good_matches, /*sl::utils::GetWarningOffset(img2.size())*/{0, 0}));
+    std::vector<od::utils::Line> lines =
+        od::ObstacleDetector::FilterTransformVectors(
+        od::ObstacleDetector::GetTransformVectors(keypoints1, keypoints2,
+        good_matches, /*od::utils::GetWarningOffset(img2.size())*/{0, 0}));
 
-    img = sl::DataPresenter::DrawTransformVectors(img2, lines);
+    img = od::DataPresenter::DrawTransformVectors(img2, lines);
 
-    img = sl::DataPresenter::DrawWarningFrame(img,
-        sl::utils::GetWarningFrame(img.size()));
+    img = od::DataPresenter::DrawWarningFrame(img,
+        od::utils::GetWarningFrame(img.size()));
 
-    img = sl::DataPresenter::DrawDangerFrame(img,
-        sl::utils::GetDangerFrame(img.size()));
+    img = od::DataPresenter::DrawDangerFrame(img,
+        od::utils::GetDangerFrame(img.size()));
 
     std::vector<cv::Rect> partitions =
-        sl::SelfLocalizator::FindPotentialObstaclePartitions(lines);
+        od::ObstacleDetector::FindPotentialObstaclePartitions(lines);
 
     for (auto &partition : partitions) {
       cv::rectangle(img, partition, {0, 255, 0});
