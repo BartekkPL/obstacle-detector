@@ -50,12 +50,12 @@ install:
   - echo "OpenCV installed."
 
 script:
-  - cd /home/travis/build/BartekkPL/self-localizator/
+  - cd /home/travis/build/BartekkPL/obstacle-detector/
   - mkdir build
   - cd build
   - cmake ..
   - make
-  - ./test/SelfLocalizator_test
+  - ./test/ObstacleDetector_test
 
 
 notifications:
