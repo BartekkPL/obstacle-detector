@@ -28,23 +28,28 @@ int main(int argc, char** argv) {
 
   cv::Mat img;
   cam >> img;
+
+  cv::resize(img, img, cv::Size(), 0.5, 0.5);
+  cv::flip(img, img, -1);
   img1 = img.clone();
 
   while(cam.isOpened()) {
     cam >> img2;
-
+    cv::resize(img2, img2, cv::Size(), 0.5, 0.5);
+    cv::flip(img2, img2, -1);
+    
     std::vector<cv::KeyPoint> keypoints1, keypoints2;
     std::vector<cv::DMatch> good_matches;
     od::ObstacleDetector::FeatureMatch(
-        /**cv::Mat(img1, od::utils::GetWarningFrame(img1.size())),
-        cv::Mat(img2, od::utils::GetWarningFrame(img2.size())),*/
-        img1, img2, keypoints1, keypoints2, good_matches);
+        cv::Mat(img1, od::utils::GetWarningFrame(img1.size())),
+        cv::Mat(img2, od::utils::GetWarningFrame(img2.size())),
+        /*img1, img2,*/ keypoints1, keypoints2, good_matches);
     cv::Mat img_matches;
 
     std::vector<od::utils::Line> lines =
         od::ObstacleDetector::FilterTransformVectors(
         od::ObstacleDetector::GetTransformVectors(keypoints1, keypoints2,
-        good_matches, /*od::utils::GetWarningOffset(img2.size())*/{0, 0}));
+        good_matches, od::utils::GetWarningOffset(img2.size())/*{0, 0}*/));
 
     img = od::DataPresenter::DrawTransformVectors(img2, lines);
 

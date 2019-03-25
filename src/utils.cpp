@@ -15,9 +15,9 @@ cv::Point GetDangerOffset(const cv::Size &img_size) {
 }
 
 cv::Rect GetWarningFrame(const cv::Size &img_size) {
-  int x = img_size.width / 9;
-  int y = img_size.height / 9;
-  return {x, y, img_size.width - 2 * x, img_size.height - 2 * y};
+  int x = img_size.width / 6;
+  int y = img_size.height / 6;
+  return {x, y, img_size.width - 2 * x, img_size.height - 3 * y};
 }
 
 cv::Point GetWarningOffset(const cv::Size &img_size) {

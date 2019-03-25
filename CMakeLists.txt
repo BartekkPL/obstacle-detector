@@ -2,7 +2,7 @@
 # PROJECT SETTINGS
 #-------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.5)
-project(ObstacleDetector VERSION 1.0.0)
+project(ObstacleDetector VERSION 1.1.0)
 
 enable_language(C CXX)
 
@@ -42,7 +42,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # EXTERNAL MODULES
 #-------------------------------------------------------------------------------
 find_package(OpenCV 4.0.0 REQUIRED core imgproc videoio highgui features2d
-    xfeatures2d)
+    xfeatures2d ximgproc video)
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 
@@ -69,8 +69,10 @@ include_directories("${PROJECT_BINARY_DIR}")
 #-------------------------------------------------------------------------------
 # MY MAIN TEST EXECUTABLE
 #-------------------------------------------------------------------------------
+
 add_executable(main ${PROJECT_SOURCE_DIR}/main.cpp)
 target_link_libraries(main
     ${OpenCV_LIBS}
     ${PROJECT_NAME}
     )
+

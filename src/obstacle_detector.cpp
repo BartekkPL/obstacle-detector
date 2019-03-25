@@ -14,8 +14,9 @@ namespace {
 const int MIN_HESSIAN = 400;
 const float MIN_TRANSFORM = 5.0f;
 const float MAX_TRANSFORM = 30.0f;
+const int MIN_VECTORS = 5;
 const float TRESH_RATIO = 0.6f;
-const int THRESHOLD_RADIUS = 50;
+const int THRESHOLD_RADIUS = 65;
 
 } // namespace
 
@@ -23,8 +24,8 @@ namespace od {
 
 void ObstacleDetector::FeaturePointsDetect(const cv::Mat& img,
     std::vector<cv::KeyPoint> &keypoints) {
-  cv::Ptr<cv::xfeatures2d::SURF> detector =
-      cv::xfeatures2d::SURF::create(MIN_HESSIAN);
+  cv::Ptr<cv::xfeatures2d::SIFT> detector =
+      cv::xfeatures2d::SIFT::create();
   detector->detect(img, keypoints);
 }
 
@@ -32,8 +33,8 @@ void ObstacleDetector::FeatureMatch(const cv::Mat &img, const cv::Mat &img_next,
                   std::vector<cv::KeyPoint> &keypoints,
                   std::vector<cv::KeyPoint> &keypoints_next,
                   std::vector<cv::DMatch> &good_matches) {
-  cv::Ptr<cv::xfeatures2d::SURF> detector =
-      cv::xfeatures2d::SURF::create(MIN_HESSIAN);
+  cv::Ptr<cv::xfeatures2d::SIFT> detector =
+      cv::xfeatures2d::SIFT::create();
   cv::Mat descriptors1, descriptors2;
 
   detector->detectAndCompute(img, cv::noArray(), keypoints, descriptors1);
@@ -114,7 +115,7 @@ std::vector<cv::Rect> ObstacleDetector::FindPotentialObstaclePartitions(
 
   std::vector<cv::Rect> boxes;
   for (size_t i = 0; i < contours.size(); ++i) {
-    if (contours[i].size() < 10)
+    if (contours[i].size() < MIN_VECTORS)
       continue;
     cv::Rect box = boundingRect(contours[i]);
     boxes.push_back(box);
